@@ -1,1 +1,606 @@
-<h1>HOLA ADRIANA</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Poker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .setup-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-screen {
+            display: none;
+        }
+
+        .game-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+
+        .game-info h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card {
+            aspect-ratio: 2/3;
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .card.selected {
+            background: #667eea;
+            color: white;
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .players-container {
+            margin: 30px 0;
+        }
+
+        .players-container h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .players-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .player-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-card.voted {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .player-vote {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .vote-status {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-reveal {
+            background: #4caf50;
+        }
+
+        .btn-reveal:hover {
+            background: #45a049;
+        }
+
+        .btn-reset {
+            background: #ff9800;
+        }
+
+        .btn-reset:hover {
+            background: #e68900;
+        }
+
+        .btn-leave {
+            background: #f44336;
+        }
+
+        .btn-leave:hover {
+            background: #da190b;
+        }
+
+        .statistics {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .statistics.show {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                gap: 10px;
+            }
+
+            .card {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🃏 Planning Poker</h1>
+
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <div class="input-group">
+                <label for="userName">Tu nombre:</label>
+                <input type="text" id="userName" placeholder="Ingresa tu nombre" />
+            </div>
+            <div class="input-group">
+                <label for="roomId">ID de la sala:</label>
+                <input type="text" id="roomId" placeholder="Ingresa o crea una sala" />
+            </div>
+            <button onclick="joinRoom()">Unirse a la Sala</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="game-info">
+                <h2>Sala: <span id="currentRoom"></span></h2>
+                <p>Usuario: <strong id="currentUser"></strong></p>
+            </div>
+
+            <div class="cards-container" id="cardsContainer"></div>
+
+            <div class="players-container">
+                <h3>Jugadores (<span id="playerCount">0</span>)</h3>
+                <div class="players-list" id="playersList"></div>
+            </div>
+
+            <div class="statistics" id="statistics">
+                <h3>Estadísticas</h3>
+                <div class="stats-grid" id="statsGrid"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-reveal" onclick="revealVotes()">Revelar Votos</button>
+                <button class="btn-reset" onclick="resetVotes()">Nueva Votación</button>
+                <button class="btn-leave" onclick="leaveRoom()">Salir de la Sala</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7xBEPmQrTwCODScHJaTmvwAVI3Tdt16M",
+            authDomain: "planning-poker-b13a2.firebaseapp.com",
+            databaseURL: "https://planning-poker-b13a2-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "planning-poker-b13a2",
+            storageBucket: "planning-poker-b13a2.firebasestorage.app",
+            messagingSenderId: "479606415356",
+            appId: "1:479606415356:web:c326a70ea02e45ac5b1c79"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Global variables
+        let currentRoomId = null;
+        let currentUserName = null;
+        let currentUserId = null;
+        let isRevealed = false;
+
+        const estimationValues = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50, 100];
+
+        // Make functions globally accessible
+        window.joinRoom = joinRoom;
+        window.selectCard = selectCard;
+        window.revealVotes = revealVotes;
+        window.resetVotes = resetVotes;
+        window.leaveRoom = leaveRoom;
+
+        // Initialize cards
+        function initializeCards() {
+            const cardsContainer = document.getElementById('cardsContainer');
+            cardsContainer.innerHTML = '';
+
+            estimationValues.forEach(value => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.textContent = value;
+                card.onclick = () => selectCard(value);
+                card.dataset.value = value;
+                cardsContainer.appendChild(card);
+            });
+        }
+
+        // Join room
+        function joinRoom() {
+            const userName = document.getElementById('userName').value.trim();
+            const roomId = document.getElementById('roomId').value.trim();
+
+            if (!userName || !roomId) {
+                alert('Por favor ingresa tu nombre y el ID de la sala');
+                return;
+            }
+
+            currentUserName = userName;
+            currentRoomId = roomId;
+            currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            // Add user to room
+            const userRef = ref(database, `rooms/${currentRoomId}/players/${currentUserId}`);
+            set(userRef, {
+                name: currentUserName,
+                vote: null,
+                voted: false,
+                timestamp: Date.now()
+            });
+
+            // Listen for room state
+            const roomRef = ref(database, `rooms/${currentRoomId}`);
+            onValue(roomRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    updateUI(data);
+                }
+            });
+
+            // Show game screen
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            document.getElementById('currentRoom').textContent = currentRoomId;
+            document.getElementById('currentUser').textContent = currentUserName;
+
+            initializeCards();
+
+            // Clean up on page unload
+            window.addEventListener('beforeunload', () => {
+                if (currentRoomId && currentUserId) {
+                    const userRef = ref(database, `rooms/${currentRoomId}/players/${currentUserId}`);
+                    remove(userRef);
+                }
+            });
+        }
+
+        // Select card
+        function selectCard(value) {
+            if (!currentRoomId || !currentUserId) return;
+
+            // Update UI
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-value="${value}"]`).classList.add('selected');
+
+            // Update database
+            const userRef = ref(database, `rooms/${currentRoomId}/players/${currentUserId}`);
+            update(userRef, {
+                vote: value,
+                voted: true
+            });
+
+            // Reset revealed state
+            const roomRef = ref(database, `rooms/${currentRoomId}/revealed`);
+            set(roomRef, false);
+        }
+
+        // Update UI with room data
+        function updateUI(roomData) {
+            const players = roomData.players || {};
+            isRevealed = roomData.revealed || false;
+
+            const playersList = document.getElementById('playersList');
+            const playerCount = document.getElementById('playerCount');
+
+            playersList.innerHTML = '';
+            playerCount.textContent = Object.keys(players).length;
+
+            const votes = [];
+
+            Object.entries(players).forEach(([playerId, player]) => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                if (player.voted) {
+                    playerCard.classList.add('voted');
+                }
+
+                const playerName = document.createElement('div');
+                playerName.className = 'player-name';
+                playerName.textContent = player.name;
+
+                const playerVote = document.createElement('div');
+
+                if (isRevealed && player.voted) {
+                    playerVote.className = 'player-vote';
+                    playerVote.textContent = player.vote;
+                    if (player.vote !== null) {
+                        votes.push(player.vote);
+                    }
+                } else if (player.voted) {
+                    playerVote.className = 'vote-status';
+                    playerVote.textContent = '✓ Votó';
+                } else {
+                    playerVote.className = 'vote-status';
+                    playerVote.textContent = '⏳ Esperando...';
+                }
+
+                playerCard.appendChild(playerName);
+                playerCard.appendChild(playerVote);
+                playersList.appendChild(playerCard);
+            });
+
+            // Show statistics if revealed
+            if (isRevealed && votes.length > 0) {
+                showStatistics(votes);
+            } else {
+                document.getElementById('statistics').classList.remove('show');
+            }
+        }
+
+        // Show statistics
+        function showStatistics(votes) {
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = '';
+
+            const average = (votes.reduce((a, b) => a + b, 0) / votes.length).toFixed(1);
+            const min = Math.min(...votes);
+            const max = Math.max(...votes);
+            const median = calculateMedian(votes);
+
+            const stats = [
+                { label: 'Promedio', value: average },
+                { label: 'Mínimo', value: min },
+                { label: 'Máximo', value: max },
+                { label: 'Mediana', value: median }
+            ];
+
+            stats.forEach(stat => {
+                const statItem = document.createElement('div');
+                statItem.className = 'stat-item';
+                statItem.innerHTML = `
+                    <div class="stat-label">${stat.label}</div>
+                    <div class="stat-value">${stat.value}</div>
+                `;
+                statsGrid.appendChild(statItem);
+            });
+
+            document.getElementById('statistics').classList.add('show');
+        }
+
+        // Calculate median
+        function calculateMedian(values) {
+            const sorted = values.slice().sort((a, b) => a - b);
+            const middle = Math.floor(sorted.length / 2);
+
+            if (sorted.length % 2 === 0) {
+                return ((sorted[middle - 1] + sorted[middle]) / 2).toFixed(1);
+            } else {
+                return sorted[middle];
+            }
+        }
+
+        // Reveal votes
+        function revealVotes() {
+            if (!currentRoomId) return;
+
+            const revealedRef = ref(database, `rooms/${currentRoomId}/revealed`);
+            set(revealedRef, true);
+        }
+
+        // Reset votes
+        function resetVotes() {
+            if (!currentRoomId) return;
+
+            const playersRef = ref(database, `rooms/${currentRoomId}/players`);
+            onValue(playersRef, (snapshot) => {
+                const players = snapshot.val();
+                if (players) {
+                    Object.keys(players).forEach(playerId => {
+                        const userRef = ref(database, `rooms/${currentRoomId}/players/${playerId}`);
+                        update(userRef, {
+                            vote: null,
+                            voted: false
+                        });
+                    });
+                }
+            }, { onlyOnce: true });
+
+            const revealedRef = ref(database, `rooms/${currentRoomId}/revealed`);
+            set(revealedRef, false);
+
+            // Clear selected card
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // Leave room
+        function leaveRoom() {
+            if (currentRoomId && currentUserId) {
+                const userRef = ref(database, `rooms/${currentRoomId}/players/${currentUserId}`);
+                remove(userRef);
+            }
+
+            currentRoomId = null;
+            currentUserName = null;
+            currentUserId = null;
+
+            document.getElementById('setupScreen').style.display = 'flex';
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('userName').value = '';
+            document.getElementById('roomId').value = '';
+        }
+    </script>
+</body>
+</html>
