@@ -13,28 +13,74 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background:
+                linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%),
+                radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(0, 0, 0, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 255, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             max-width: 1200px;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             text-align: center;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 30px;
-            font-size: 2.5em;
+            font-size: 2.8em;
+            font-weight: 800;
+            text-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+            letter-spacing: -1px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            border-radius: 2px;
         }
 
         .setup-screen {
@@ -70,27 +116,66 @@
         }
 
         button {
-            padding: 12px 24px;
-            background: #667eea;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow:
+                0 6px 20px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.5s;
         }
 
         button:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow:
+                0 10px 30px rgba(102, 126, 234, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(-1px);
+            box-shadow:
+                0 5px 15px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         button:disabled {
-            background: #ccc;
+            background: linear-gradient(135deg, #ccc 0%, #aaa 100%);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
+        }
+
+        button:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .game-screen {
@@ -122,29 +207,102 @@
 
         .card {
             aspect-ratio: 2/3;
-            background: white;
-            border: 3px solid #667eea;
-            border-radius: 12px;
+            background:
+                linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             color: #667eea;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            box-shadow:
+                0 4px 15px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: left 0.5s;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transform: translateY(-15px) rotate(2deg);
+            box-shadow:
+                0 15px 40px rgba(102, 126, 234, 0.4),
+                0 0 0 3px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .card:hover::after {
+            left: 100%;
+        }
+
+        .card:active {
+            transform: translateY(-12px) scale(0.98);
         }
 
         .card.selected {
-            background: #667eea;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
             color: white;
-            transform: translateY(-10px) scale(1.05);
+            transform: translateY(-15px) scale(1.08);
+            box-shadow:
+                0 20px 50px rgba(102, 126, 234, 0.6),
+                0 0 0 4px rgba(102, 126, 234, 0.3),
+                inset 0 -5px 20px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation: cardPulse 2s ease-in-out infinite;
+        }
+
+        .card.selected::before {
+            opacity: 1;
+        }
+
+        @keyframes cardPulse {
+            0%, 100% {
+                box-shadow:
+                    0 20px 50px rgba(102, 126, 234, 0.6),
+                    0 0 0 4px rgba(102, 126, 234, 0.3),
+                    inset 0 -5px 20px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                box-shadow:
+                    0 22px 55px rgba(102, 126, 234, 0.7),
+                    0 0 0 5px rgba(102, 126, 234, 0.4),
+                    inset 0 -5px 20px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            }
         }
 
         .players-container {
@@ -204,27 +362,42 @@
         }
 
         .btn-reveal {
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            box-shadow:
+                0 6px 20px rgba(76, 175, 80, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn-reveal:hover {
-            background: #45a049;
+            box-shadow:
+                0 10px 30px rgba(76, 175, 80, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .btn-reset {
-            background: #ff9800;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            box-shadow:
+                0 6px 20px rgba(255, 152, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn-reset:hover {
-            background: #e68900;
+            box-shadow:
+                0 10px 30px rgba(255, 152, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .btn-leave {
-            background: #f44336;
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            box-shadow:
+                0 6px 20px rgba(244, 67, 54, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn-leave:hover {
-            background: #da190b;
+            box-shadow:
+                0 10px 30px rgba(244, 67, 54, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .statistics {
@@ -284,13 +457,32 @@
             width: 600px;
             height: 400px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #2d5016 0%, #1a3d0d 100%);
+            background:
+                linear-gradient(135deg, rgba(45, 80, 22, 0.95) 0%, rgba(26, 61, 13, 0.95) 100%),
+                radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
             border-radius: 50%;
-            border: 15px solid #8b4513;
+            border: 20px solid transparent;
+            background-clip: padding-box;
+            position: relative;
             box-shadow:
-                0 0 0 5px #654321,
-                0 10px 40px rgba(0, 0, 0, 0.5),
-                inset 0 0 30px rgba(0, 0, 0, 0.3);
+                0 0 0 3px rgba(139, 69, 19, 0.8),
+                0 0 0 8px rgba(101, 67, 33, 0.6),
+                0 0 0 12px rgba(139, 69, 19, 0.4),
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 0 50px rgba(0, 0, 0, 0.4),
+                inset 0 5px 20px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .poker-table:hover {
+            box-shadow:
+                0 0 0 3px rgba(139, 69, 19, 0.9),
+                0 0 0 8px rgba(101, 67, 33, 0.7),
+                0 0 0 12px rgba(139, 69, 19, 0.5),
+                0 25px 70px rgba(0, 0, 0, 0.7),
+                inset 0 0 50px rgba(0, 0, 0, 0.4),
+                inset 0 5px 20px rgba(255, 255, 255, 0.05);
         }
 
         .poker-table::before {
@@ -301,8 +493,21 @@
             transform: translate(-50%, -50%);
             width: 80%;
             height: 60%;
-            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border: 3px dashed rgba(255, 255, 255, 0.15);
             border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.02);
+            }
         }
 
         .table-center {
@@ -311,9 +516,14 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 16px;
             font-style: italic;
+            font-weight: 600;
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
         }
 
         .player-seat {
@@ -331,27 +541,85 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: 3px solid white;
+            background:
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 4px solid white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             color: white;
             font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 2px rgba(102, 126, 234, 0.3),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
 
         .player-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            transform: scale(1.15) translateY(-5px);
+            box-shadow:
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 0 3px rgba(102, 126, 234, 0.5),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.2),
+                0 0 30px rgba(102, 126, 234, 0.3);
         }
 
         .player-avatar.current-user {
             border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            box-shadow:
+                0 8px 25px rgba(255, 215, 0, 0.5),
+                0 0 30px rgba(255, 215, 0, 0.4),
+                0 0 0 3px rgba(255, 215, 0, 0.3),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+            animation: currentUserGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes currentUserGlow {
+            0%, 100% {
+                box-shadow:
+                    0 8px 25px rgba(255, 215, 0, 0.5),
+                    0 0 30px rgba(255, 215, 0, 0.4),
+                    0 0 0 3px rgba(255, 215, 0, 0.3),
+                    inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow:
+                    0 8px 30px rgba(255, 215, 0, 0.7),
+                    0 0 40px rgba(255, 215, 0, 0.6),
+                    0 0 0 4px rgba(255, 215, 0, 0.5),
+                    inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+            }
         }
 
         .player-seat-name {
@@ -372,22 +640,55 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            width: 24px;
-            height: 24px;
-            background: #4caf50;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 13px;
             color: white;
             font-weight: bold;
-            border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            border: 3px solid white;
+            box-shadow:
+                0 4px 12px rgba(76, 175, 80, 0.5),
+                0 0 0 2px rgba(76, 175, 80, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            animation: badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .player-vote-badge.waiting {
-            background: #ff9800;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            box-shadow:
+                0 4px 12px rgba(255, 152, 0, 0.5),
+                0 0 0 2px rgba(255, 152, 0, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            animation: waitingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes waitingPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
 
         /* Emoji System */
@@ -401,11 +702,13 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             display: none;
             z-index: 1000;
-            max-width: 300px;
+            max-width: 350px;
+            max-height: 450px;
         }
 
         .emoji-selector.show {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         .emoji-selector-header {
@@ -443,17 +746,38 @@
 
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 8px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .emoji-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .emoji-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .emoji-grid::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .emoji-grid::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
         .emoji-item {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.2s;
@@ -462,29 +786,50 @@
 
         .emoji-item:hover {
             background: #e0e0e0;
-            transform: scale(1.2);
+            transform: scale(1.15);
+            z-index: 1;
         }
 
         .emoji-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            font-size: 28px;
+            border: 3px solid white;
+            font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s;
-            z-index: 999;
+            box-shadow:
+                0 6px 16px rgba(102, 126, 234, 0.5),
+                0 0 0 2px rgba(102, 126, 234, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .player-avatar:hover .emoji-btn {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .emoji-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            transform: translate(-50%, -50%) scale(1.25);
+            box-shadow:
+                0 8px 20px rgba(102, 126, 234, 0.7),
+                0 0 0 3px rgba(102, 126, 234, 0.3),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .emoji-btn:active {
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         /* Flying Emoji Animation */
@@ -493,20 +838,30 @@
             font-size: 48px;
             pointer-events: none;
             z-index: 2000;
-            animation: flyEmoji 1.5s ease-out forwards;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        @keyframes flyEmoji {
+        .flying-emoji.paper-throw {
+            animation: paperRotate 1.2s ease-out forwards;
+        }
+
+        @keyframes paperRotate {
             0% {
-                opacity: 1;
-                transform: scale(0.5) rotate(0deg);
+                transform: scale(0.8) rotate(0deg);
+            }
+            25% {
+                transform: scale(1.1) rotate(90deg);
             }
             50% {
-                transform: scale(1.3) rotate(180deg);
+                transform: scale(1.2) rotate(180deg);
+            }
+            75% {
+                transform: scale(1.1) rotate(270deg);
             }
             100% {
-                opacity: 0;
-                transform: scale(0.8) rotate(360deg);
+                opacity: 0.3;
+                transform: scale(0.9) rotate(360deg);
             }
         }
 
@@ -646,7 +1001,6 @@
             </div>
 
             <!-- Emoji System -->
-            <button class="emoji-btn" id="emojiBtn" onclick="toggleEmojiSelector()">😊</button>
             <div class="emoji-selector" id="emojiSelector">
                 <div class="emoji-selector-header">
                     <span class="emoji-selector-title">Selecciona un jugador</span>
@@ -685,7 +1039,91 @@
         let selectedEmojiForSend = null;
 
         const estimationValues = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50, 100];
-        const emojis = ['👍', '👏', '🎉', '❤️', '😂', '🔥', '💪', '🚀', '⭐', '✨', '👌', '🙌', '💯', '🤝', '🎯'];
+        // Expanded emoji list similar to WhatsApp
+        const emojis = [
+            // Smileys & Emotion
+            '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇',
+            '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪', '😝', '🤑',
+            '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬',
+            '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵',
+            '🥶', '🥴', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '☹️',
+            '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱',
+            '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿',
+            // Gestures & Body Parts
+            '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈',
+            '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌',
+            '👐', '🤲', '🤝', '🙏', '✍️', '💪', '🦾', '🦿', '🦵', '🦶', '👂', '🦻', '👃',
+            '🧠', '🦷', '🦴', '👀', '👁️', '👅', '👄',
+            // Animals & Nature
+            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷',
+            '🐸', '🐵', '🙈', '🙉', '🙊', '🐔', '🐧', '🐦', '🐤', '🐣', '🐥', '🦆', '🦅',
+            '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐜', '🦟',
+            '🦗', '🕷️', '🦂', '🐢', '🐍', '🦎', '🦖', '🦕', '🐙', '🦑', '🦐', '🦞', '🦀',
+            '🐡', '🐠', '🐟', '🐬', '🐳', '🐋', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍', '🦧',
+            '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🐃', '🐂', '🐄', '🐎', '🐖', '🐏',
+            '🐑', '🦙', '🐐', '🦌', '🐕', '🐩', '🦮', '🐈', '🐓', '🦃', '🦚', '🦜', '🦢',
+            '🦩', '🕊️', '🐇', '🦝', '🦨', '🦡', '🦦', '🦥', '🐁', '🐀', '🐿️', '🦔',
+            // Food & Drink
+            '🍎', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥',
+            '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🌽', '🥕', '🧄', '🧅', '🥔',
+            '🍠', '🥐', '🥯', '🍞', '🥖', '🥨', '🧀', '🥚', '🍳', '🧈', '🥞', '🧇', '🥓',
+            '🥩', '🍗', '🍖', '🦴', '🌭', '🍔', '🍟', '🍕', '🥪', '🥙', '🧆', '🌮', '🌯',
+            '🥗', '🥘', '🥫', '🍝', '🍜', '🍲', '🍛', '🍣', '🍱', '🥟', '🦪', '🍤', '🍙',
+            '🍚', '🍘', '🍥', '🥠', '🥮', '🍢', '🍡', '🍧', '🍨', '🍦', '🥧', '🧁', '🍰',
+            '🎂', '🍮', '🍭', '🍬', '🍫', '🍿', '🍩', '🍪', '🌰', '🥜', '🍯', '🥛', '🍼',
+            '☕', '🍵', '🧃', '🥤', '🍶', '🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🧉',
+            '🍾', '🧊',
+            // Activities & Sports
+            '⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🏉', '🥏', '🎱', '🪀', '🏓', '🏸',
+            '🏒', '🏑', '🥍', '🏏', '🥅', '⛳', '🪁', '🏹', '🎣', '🤿', '🥊', '🥋', '🎽',
+            '🛹', '🛷', '⛸️', '🥌', '🎿', '⛷️', '🏂', '🪂', '🏋️', '🤼', '🤸', '🤺', '⛹️',
+            '🤾', '🏌️', '🏇', '🧘', '🏊', '🤽', '🚣', '🧗', '🚴', '🚵', '🎪', '🎭', '🎨',
+            '🎬', '🎤', '🎧', '🎼', '🎹', '🥁', '🎷', '🎺', '🎸', '🪕', '🎻', '🎲', '♟️',
+            '🎯', '🎳', '🎮', '🎰', '🧩',
+            // Travel & Places
+            '🚗', '🚕', '🚙', '🚌', '🚎', '🏎️', '🚓', '🚑', '🚒', '🚐', '🚚', '🚛', '🚜',
+            '🦯', '🦽', '🦼', '🛴', '🚲', '🛵', '🏍️', '🛺', '🚨', '🚔', '🚍', '🚘', '🚖',
+            '🚡', '🚠', '🚟', '🚃', '🚋', '🚞', '🚝', '🚄', '🚅', '🚈', '🚂', '🚆', '🚇',
+            '🚊', '🚉', '✈️', '🛫', '🛬', '🛩️', '💺', '🛰️', '🚀', '🛸', '🚁', '🛶', '⛵',
+            '🚤', '🛥️', '🛳️', '⛴️', '🚢', '⚓', '⛽', '🚧', '🚦', '🚥', '🚏', '🗺️', '🗿',
+            '🗽', '🗼', '🏰', '🏯', '🏟️', '🎡', '🎢', '🎠', '⛲', '⛱️', '🏖️', '🏝️', '🏜️',
+            '🌋', '⛰️', '🏔️', '🗻', '🏕️', '⛺', '🏠', '🏡', '🏘️', '🏚️', '🏗️', '🏭', '🏢',
+            '🏬', '🏣', '🏤', '🏥', '🏦', '🏨', '🏪', '🏫', '🏩', '💒', '🏛️', '⛪', '🕌',
+            '🕍', '🛕', '🕋', '⛩️', '🛤️', '🛣️', '🗾', '🎑', '🏞️', '🌅', '🌄', '🌠', '🎇',
+            '🎆', '🌇', '🌆', '🏙️', '🌃', '🌌', '🌉', '🌁',
+            // Objects
+            '⌚', '📱', '📲', '💻', '⌨️', '🖥️', '🖨️', '🖱️', '🖲️', '🕹️', '🗜️', '💾', '💿',
+            '📀', '📼', '📷', '📸', '📹', '🎥', '📽️', '🎞️', '📞', '☎️', '📟', '📠', '📺',
+            '📻', '🎙️', '🎚️', '🎛️', '🧭', '⏱️', '⏲️', '⏰', '🕰️', '⌛', '⏳', '📡', '🔋',
+            '🔌', '💡', '🔦', '🕯️', '🪔', '🧯', '🛢️', '💸', '💵', '💴', '💶', '💷', '💰',
+            '💳', '💎', '⚖️', '🧰', '🔧', '🔨', '⚒️', '🛠️', '⛏️', '🔩', '⚙️', '🧱', '⛓️',
+            '🧲', '🔫', '💣', '🧨', '🪓', '🔪', '🗡️', '⚔️', '🛡️', '🚬', '⚰️', '⚱️', '🏺',
+            '🔮', '📿', '🧿', '💈', '⚗️', '🔭', '🔬', '🕳️', '🩹', '🩺', '💊', '💉', '🩸',
+            '🧬', '🦠', '🧫', '🧪', '🌡️', '🧹', '🧺', '🧻', '🚽', '🚰', '🚿', '🛁', '🛀',
+            '🧼', '🪒', '🧽', '🧴', '🛎️', '🔑', '🗝️', '🚪', '🪑', '🛋️', '🛏️', '🛌', '🧸',
+            '🖼️', '🛍️', '🛒', '🎁', '🎈', '🎏', '🎀', '🎊', '🎉', '🎎', '🏮', '🎐', '🧧',
+            // Symbols
+            '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞',
+            '💓', '💗', '💖', '💘', '💝', '💟', '☮️', '✝️', '☪️', '🕉️', '☸️', '✡️', '🔯',
+            '🕎', '☯️', '☦️', '🛐', '⛎', '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐',
+            '♑', '♒', '♓', '🆔', '⚛️', '🉑', '☢️', '☣️', '📴', '📳', '🈶', '🈚', '🈸',
+            '🈺', '🈷️', '✴️', '🆚', '💮', '🉐', '㊙️', '㊗️', '🈴', '🈵', '🈹', '🈲', '🅰️',
+            '🅱️', '🆎', '🆑', '🅾️', '🆘', '❌', '⭕', '🛑', '⛔', '📛', '🚫', '💯', '💢',
+            '♨️', '🚷', '🚯', '🚳', '🚱', '🔞', '📵', '🚭', '❗', '❕', '❓', '❔', '‼️',
+            '⁉️', '🔅', '🔆', '〽️', '⚠️', '🚸', '🔱', '⚜️', '🔰', '♻️', '✅', '🈯', '💹',
+            '❇️', '✳️', '❎', '🌐', '💠', '🔠', '🔡', '🔢', '🔣', '🔤', '🅿️', '🆗', '🆙',
+            '🆒', '🆕', '🆓', '0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣',
+            '🔟', '🔢', '⏏️', '▶️', '⏸️', '⏯️', '⏹️', '⏺️', '⏭️', '⏮️', '⏩', '⏪', '⏫',
+            '⏬', '◀️', '🔼', '🔽', '➡️', '⬅️', '⬆️', '⬇️', '↗️', '↘️', '↙️', '↖️', '↕️',
+            '↔️', '↪️', '↩️', '⤴️', '⤵️', '🔀', '🔁', '🔂', '🔄', '🔃', '🎵', '🎶', '✖️',
+            '💲', '💱', '™️', '©️', '®️', '〰️', '➰', '➿', '🔚', '🔙', '🔛', '🔝', '🔜',
+            '✔️', '☑️', '🔘', '🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '⚫', '⚪', '🟤', '🔺',
+            '🔻', '🔸', '🔹', '🔶', '🔷', '🔳', '🔲', '▪️', '▫️', '◾', '◽', '◼️', '◻️',
+            '🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '⬛', '⬜', '🟫', '🔈', '🔇', '🔉', '🔊',
+            '🔔', '🔕', '📣', '📢', '💬', '💭', '🗯️', '♠️', '♣️', '♥️', '♦️', '🃏', '🎴',
+            '🀄', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛',
+            '🕜', '🕝', '🕞', '🕟', '🕠', '🕡', '🕢', '🕣', '🕤', '🕥', '🕦', '🕧'
+        ];
 
         // Make functions globally accessible
         window.joinRoom = joinRoom;
@@ -757,7 +1195,18 @@
                     avatar.classList.add('current-user');
                 }
                 avatar.textContent = player.name.charAt(0).toUpperCase();
-                avatar.onclick = () => showEmojiPickerForPlayer(playerId, player.name);
+
+                // Add emoji button to other players (not current user)
+                if (playerId !== currentUserId) {
+                    const emojiBtn = document.createElement('button');
+                    emojiBtn.className = 'emoji-btn';
+                    emojiBtn.textContent = '😊';
+                    emojiBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        showEmojiPickerForPlayer(playerId, player.name);
+                    };
+                    avatar.appendChild(emojiBtn);
+                }
 
                 // Add vote badge
                 if (player.voted) {
@@ -863,21 +1312,56 @@
             const flyingEmoji = document.createElement('div');
             flyingEmoji.className = 'flying-emoji';
             flyingEmoji.textContent = emoji;
-            flyingEmoji.style.left = `${fromRect.left + fromRect.width / 2}px`;
-            flyingEmoji.style.top = `${fromRect.top + fromRect.height / 2}px`;
+
+            const startX = fromRect.left + fromRect.width / 2;
+            const startY = fromRect.top + fromRect.height / 2;
+            const endX = toRect.left + toRect.width / 2;
+            const endY = toRect.top + toRect.height / 2;
+
+            flyingEmoji.style.left = `${startX}px`;
+            flyingEmoji.style.top = `${startY}px`;
 
             document.body.appendChild(flyingEmoji);
 
-            // Animate to target
-            setTimeout(() => {
-                flyingEmoji.style.left = `${toRect.left + toRect.width / 2}px`;
-                flyingEmoji.style.top = `${toRect.top + toRect.height / 2}px`;
-            }, 50);
+            // Calculate parabolic arc (paper throw effect)
+            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const arcHeight = Math.min(distance * 0.3, 150); // Parabolic arc height
+
+            // Add paper throw animation
+            flyingEmoji.classList.add('paper-throw');
+
+            // Animate to target with parabolic arc using keyframes
+            const keyframes = [];
+            const steps = 30;
+            for (let i = 0; i <= steps; i++) {
+                const progress = i / steps;
+                // Cubic bezier for smooth motion
+                const easeProgress = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                const x = startX + (endX - startX) * easeProgress;
+                // Parabolic curve: goes up then down
+                const parabola = 4 * arcHeight * progress * (1 - progress);
+                const y = startY + (endY - startY) * easeProgress - parabola;
+
+                keyframes.push({
+                    left: `${x}px`,
+                    top: `${y}px`,
+                    offset: progress
+                });
+            }
+
+            flyingEmoji.animate(keyframes, {
+                duration: 1200,
+                easing: 'ease-out',
+                fill: 'forwards'
+            });
 
             // Remove after animation
             setTimeout(() => {
                 flyingEmoji.remove();
-            }, 1500);
+            }, 1300);
         }
 
         function showEmojiNotification(emoji, fromName, playerSeat) {
