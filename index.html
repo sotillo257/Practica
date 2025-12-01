@@ -694,8 +694,6 @@
         /* Emoji System */
         .emoji-selector {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
             background: white;
             border-radius: 16px;
             padding: 15px;
@@ -704,6 +702,19 @@
             z-index: 1000;
             max-width: 350px;
             max-height: 450px;
+            transform-origin: left center;
+            animation: emojiSelectorPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes emojiSelectorPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .emoji-selector.show {
@@ -771,6 +782,25 @@
             background: #555;
         }
 
+        .emoji-recent {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px dashed #e0e0e0;
+        }
+
+        .emoji-recent-title {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
         .emoji-item {
             width: 45px;
             height: 45px;
@@ -788,6 +818,16 @@
             background: #e0e0e0;
             transform: scale(1.15);
             z-index: 1;
+        }
+
+        .emoji-item.recent {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea30;
+        }
+
+        .emoji-item.recent:hover {
+            background: linear-gradient(135deg, #667eea30 0%, #764ba230 100%);
+            border-color: #667eea50;
         }
 
         .emoji-btn {
@@ -1037,6 +1077,8 @@
         let currentUserId = null;
         let isRevealed = false;
         let selectedEmojiForSend = null;
+        let recentEmojis = ['👍', '❤️', '😂', '🎉', '🔥']; // Default recent emojis
+        let currentTargetPlayer = null;
 
         const estimationValues = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50, 100];
         // Expanded emoji list similar to WhatsApp
@@ -1246,6 +1288,7 @@
         function closeEmojiSelector() {
             document.getElementById('emojiSelector').classList.remove('show');
             selectedEmojiForSend = null;
+            currentTargetPlayer = null;
         }
 
         function showEmojiTargetSelection() {
@@ -1258,14 +1301,71 @@
                 return; // Can't send emoji to yourself
             }
 
+            currentTargetPlayer = { id: targetPlayerId, name: targetPlayerName };
+
             const selector = document.getElementById('emojiSelector');
             const container = document.getElementById('emojiTargetPlayers');
 
             // Update title
             document.querySelector('.emoji-selector-title').textContent = `Enviar a ${targetPlayerName}`;
 
-            // Show emoji grid
+            // Position selector near the player avatar
+            const playerSeat = document.querySelector(`[data-player-id="${targetPlayerId}"]`);
+            if (playerSeat) {
+                const rect = playerSeat.getBoundingClientRect();
+                const selectorWidth = 350;
+                const selectorHeight = 450;
+
+                // Position to the right of the avatar, or left if not enough space
+                let left = rect.right + 15;
+                let top = rect.top - 100;
+
+                // Adjust if goes off screen
+                if (left + selectorWidth > window.innerWidth) {
+                    left = rect.left - selectorWidth - 15;
+                }
+                if (top < 10) {
+                    top = 10;
+                }
+                if (top + selectorHeight > window.innerHeight) {
+                    top = window.innerHeight - selectorHeight - 10;
+                }
+
+                selector.style.left = `${left}px`;
+                selector.style.top = `${top}px`;
+            }
+
+            // Show emoji picker
             container.innerHTML = '';
+
+            // Add recent emojis section
+            if (recentEmojis.length > 0) {
+                const recentTitle = document.createElement('div');
+                recentTitle.className = 'emoji-recent-title';
+                recentTitle.textContent = 'Recientes';
+                container.appendChild(recentTitle);
+
+                const recentContainer = document.createElement('div');
+                recentContainer.className = 'emoji-recent';
+
+                recentEmojis.slice(0, 5).forEach(emoji => {
+                    const emojiItem = document.createElement('div');
+                    emojiItem.className = 'emoji-item recent';
+                    emojiItem.textContent = emoji;
+                    emojiItem.onclick = () => sendEmojiToPlayer(emoji, targetPlayerId);
+                    recentContainer.appendChild(emojiItem);
+                });
+
+                container.appendChild(recentContainer);
+            }
+
+            // Add all emojis grid
+            const allTitle = document.createElement('div');
+            allTitle.className = 'emoji-recent-title';
+            allTitle.textContent = 'Todos los emojis';
+            allTitle.style.marginTop = '10px';
+            container.appendChild(allTitle);
+
             const emojiGrid = document.createElement('div');
             emojiGrid.className = 'emoji-grid';
 
@@ -1284,6 +1384,9 @@
         function sendEmojiToPlayer(emoji, targetPlayerId) {
             if (!currentRoomId || !currentUserId) return;
 
+            // Update recent emojis
+            updateRecentEmojis(emoji);
+
             // Send emoji via Firebase
             const emojiRef = ref(database, `rooms/${currentRoomId}/emojis/${Date.now()}`);
             set(emojiRef, {
@@ -1294,10 +1397,45 @@
                 timestamp: Date.now()
             });
 
-            closeEmojiSelector();
+            // DON'T close the selector - allow spam mode
+            // Refresh the emoji picker to show updated recents
+            if (currentTargetPlayer) {
+                showEmojiPickerForPlayer(currentTargetPlayer.id, currentTargetPlayer.name);
+            }
 
             // Show flying animation locally
             showFlyingEmojiAnimation(emoji, currentUserId, targetPlayerId);
+        }
+
+        function updateRecentEmojis(emoji) {
+            // Remove emoji if it already exists
+            recentEmojis = recentEmojis.filter(e => e !== emoji);
+
+            // Add to the beginning
+            recentEmojis.unshift(emoji);
+
+            // Keep only top 5
+            if (recentEmojis.length > 5) {
+                recentEmojis = recentEmojis.slice(0, 5);
+            }
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('planning-poker-recent-emojis', JSON.stringify(recentEmojis));
+            } catch (e) {
+                // Ignore localStorage errors
+            }
+        }
+
+        function loadRecentEmojis() {
+            try {
+                const saved = localStorage.getItem('planning-poker-recent-emojis');
+                if (saved) {
+                    recentEmojis = JSON.parse(saved);
+                }
+            } catch (e) {
+                // Ignore localStorage errors
+            }
         }
 
         function showFlyingEmojiAnimation(emoji, fromPlayerId, toPlayerId) {
@@ -1448,6 +1586,9 @@
             document.getElementById('currentUser').textContent = currentUserName;
 
             initializeCards();
+
+            // Load recent emojis from localStorage
+            loadRecentEmojis();
 
             // Start listening for emojis
             listenForEmojis();
