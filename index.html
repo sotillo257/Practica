@@ -270,6 +270,280 @@
             display: none;
         }
 
+        /* Poker Table Styles */
+        .poker-table-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .poker-table {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #2d5016 0%, #1a3d0d 100%);
+            border-radius: 50%;
+            border: 15px solid #8b4513;
+            box-shadow:
+                0 0 0 5px #654321,
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                inset 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .poker-table::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 60%;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .table-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .player-seat {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .player-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .player-avatar.current-user {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .player-seat-name {
+            margin-top: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 10px;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .player-vote-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 24px;
+            height: 24px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .player-vote-badge.waiting {
+            background: #ff9800;
+        }
+
+        /* Emoji System */
+        .emoji-selector {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .emoji-selector.show {
+            display: block;
+        }
+
+        .emoji-selector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .emoji-selector-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .emoji-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .emoji-close:hover {
+            color: #333;
+            background: #f0f0f0;
+            border-radius: 50%;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .emoji-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            background: #f5f5f5;
+        }
+
+        .emoji-item:hover {
+            background: #e0e0e0;
+            transform: scale(1.2);
+        }
+
+        .emoji-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .emoji-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Flying Emoji Animation */
+        .flying-emoji {
+            position: fixed;
+            font-size: 48px;
+            pointer-events: none;
+            z-index: 2000;
+            animation: flyEmoji 1.5s ease-out forwards;
+        }
+
+        @keyframes flyEmoji {
+            0% {
+                opacity: 1;
+                transform: scale(0.5) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.3) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.8) rotate(360deg);
+            }
+        }
+
+        .emoji-notification {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 24px;
+            white-space: nowrap;
+            animation: emojiPop 2s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes emojiPop {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px) scale(0.5);
+            }
+            20% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-10px) scale(1.2);
+            }
+            80% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-10px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px) scale(0.8);
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -286,6 +560,38 @@
 
             .card {
                 font-size: 20px;
+            }
+
+            .poker-table {
+                width: 100%;
+                max-width: 400px;
+                height: 300px;
+            }
+
+            .player-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .player-seat {
+                width: 70px;
+                height: 70px;
+            }
+
+            .emoji-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .emoji-selector {
+                max-width: 250px;
+                bottom: 80px;
+            }
+
+            .emoji-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
@@ -314,6 +620,13 @@
                 <p>Usuario: <strong id="currentUser"></strong></p>
             </div>
 
+            <!-- Poker Table -->
+            <div class="poker-table-container">
+                <div class="poker-table" id="pokerTable">
+                    <div class="table-center">Planning Poker</div>
+                </div>
+            </div>
+
             <div class="cards-container" id="cardsContainer"></div>
 
             <div class="players-container">
@@ -330,6 +643,16 @@
                 <button class="btn-reveal" onclick="revealVotes()">Revelar Votos</button>
                 <button class="btn-reset" onclick="resetVotes()">Nueva Votación</button>
                 <button class="btn-leave" onclick="leaveRoom()">Salir de la Sala</button>
+            </div>
+
+            <!-- Emoji System -->
+            <button class="emoji-btn" id="emojiBtn" onclick="toggleEmojiSelector()">😊</button>
+            <div class="emoji-selector" id="emojiSelector">
+                <div class="emoji-selector-header">
+                    <span class="emoji-selector-title">Selecciona un jugador</span>
+                    <button class="emoji-close" onclick="closeEmojiSelector()">×</button>
+                </div>
+                <div id="emojiTargetPlayers"></div>
             </div>
         </div>
     </div>
@@ -359,8 +682,10 @@
         let currentUserName = null;
         let currentUserId = null;
         let isRevealed = false;
+        let selectedEmojiForSend = null;
 
         const estimationValues = [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50, 100];
+        const emojis = ['👍', '👏', '🎉', '❤️', '😂', '🔥', '💪', '🚀', '⭐', '✨', '👌', '🙌', '💯', '🤝', '🎯'];
 
         // Make functions globally accessible
         window.joinRoom = joinRoom;
@@ -368,6 +693,9 @@
         window.revealVotes = revealVotes;
         window.resetVotes = resetVotes;
         window.leaveRoom = leaveRoom;
+        window.toggleEmojiSelector = toggleEmojiSelector;
+        window.closeEmojiSelector = closeEmojiSelector;
+        window.sendEmojiToPlayer = sendEmojiToPlayer;
 
         // Initialize cards
         function initializeCards() {
@@ -381,6 +709,219 @@
                 card.onclick = () => selectCard(value);
                 card.dataset.value = value;
                 cardsContainer.appendChild(card);
+            });
+        }
+
+        // Calculate player position around the poker table
+        function calculatePlayerPosition(index, total) {
+            const table = document.getElementById('pokerTable');
+            const tableWidth = table.offsetWidth;
+            const tableHeight = table.offsetHeight;
+
+            // Calculate angle for this player (distribute evenly around circle)
+            const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
+
+            // Calculate position on ellipse
+            const radiusX = (tableWidth / 2) - 60; // 60px padding
+            const radiusY = (tableHeight / 2) - 60;
+
+            const x = tableWidth / 2 + radiusX * Math.cos(angle) - 40; // 40 = half of player seat width
+            const y = tableHeight / 2 + radiusY * Math.sin(angle) - 40; // 40 = half of player seat height
+
+            return { x, y };
+        }
+
+        // Render poker table with players
+        function renderPokerTable(players) {
+            const pokerTable = document.getElementById('pokerTable');
+
+            // Remove existing player seats (keep table center)
+            const existingSeats = pokerTable.querySelectorAll('.player-seat');
+            existingSeats.forEach(seat => seat.remove());
+
+            const playerEntries = Object.entries(players);
+            const totalPlayers = playerEntries.length;
+
+            playerEntries.forEach(([playerId, player], index) => {
+                const position = calculatePlayerPosition(index, totalPlayers);
+
+                const playerSeat = document.createElement('div');
+                playerSeat.className = 'player-seat';
+                playerSeat.style.left = `${position.x}px`;
+                playerSeat.style.top = `${position.y}px`;
+                playerSeat.dataset.playerId = playerId;
+
+                const avatar = document.createElement('div');
+                avatar.className = 'player-avatar';
+                if (playerId === currentUserId) {
+                    avatar.classList.add('current-user');
+                }
+                avatar.textContent = player.name.charAt(0).toUpperCase();
+                avatar.onclick = () => showEmojiPickerForPlayer(playerId, player.name);
+
+                // Add vote badge
+                if (player.voted) {
+                    const badge = document.createElement('div');
+                    badge.className = 'player-vote-badge';
+                    if (isRevealed && player.vote !== null) {
+                        badge.textContent = player.vote;
+                    } else {
+                        badge.textContent = '✓';
+                        badge.classList.add('waiting');
+                    }
+                    avatar.appendChild(badge);
+                }
+
+                const nameLabel = document.createElement('div');
+                nameLabel.className = 'player-seat-name';
+                nameLabel.textContent = player.name;
+
+                playerSeat.appendChild(avatar);
+                playerSeat.appendChild(nameLabel);
+                pokerTable.appendChild(playerSeat);
+            });
+        }
+
+        // Emoji selector functions
+        function toggleEmojiSelector() {
+            const selector = document.getElementById('emojiSelector');
+            if (selector.classList.contains('show')) {
+                closeEmojiSelector();
+            } else {
+                // Show player selection first
+                showEmojiTargetSelection();
+                selector.classList.add('show');
+            }
+        }
+
+        function closeEmojiSelector() {
+            document.getElementById('emojiSelector').classList.remove('show');
+            selectedEmojiForSend = null;
+        }
+
+        function showEmojiTargetSelection() {
+            const container = document.getElementById('emojiTargetPlayers');
+            container.innerHTML = '<p style="font-size: 12px; color: #666; margin-bottom: 10px;">Haz click en un jugador de la mesa</p>';
+        }
+
+        function showEmojiPickerForPlayer(targetPlayerId, targetPlayerName) {
+            if (targetPlayerId === currentUserId) {
+                return; // Can't send emoji to yourself
+            }
+
+            const selector = document.getElementById('emojiSelector');
+            const container = document.getElementById('emojiTargetPlayers');
+
+            // Update title
+            document.querySelector('.emoji-selector-title').textContent = `Enviar a ${targetPlayerName}`;
+
+            // Show emoji grid
+            container.innerHTML = '';
+            const emojiGrid = document.createElement('div');
+            emojiGrid.className = 'emoji-grid';
+
+            emojis.forEach(emoji => {
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'emoji-item';
+                emojiItem.textContent = emoji;
+                emojiItem.onclick = () => sendEmojiToPlayer(emoji, targetPlayerId);
+                emojiGrid.appendChild(emojiItem);
+            });
+
+            container.appendChild(emojiGrid);
+            selector.classList.add('show');
+        }
+
+        function sendEmojiToPlayer(emoji, targetPlayerId) {
+            if (!currentRoomId || !currentUserId) return;
+
+            // Send emoji via Firebase
+            const emojiRef = ref(database, `rooms/${currentRoomId}/emojis/${Date.now()}`);
+            set(emojiRef, {
+                emoji: emoji,
+                from: currentUserId,
+                fromName: currentUserName,
+                to: targetPlayerId,
+                timestamp: Date.now()
+            });
+
+            closeEmojiSelector();
+
+            // Show flying animation locally
+            showFlyingEmojiAnimation(emoji, currentUserId, targetPlayerId);
+        }
+
+        function showFlyingEmojiAnimation(emoji, fromPlayerId, toPlayerId) {
+            const fromSeat = document.querySelector(`[data-player-id="${fromPlayerId}"]`);
+            const toSeat = document.querySelector(`[data-player-id="${toPlayerId}"]`);
+
+            if (!fromSeat || !toSeat) return;
+
+            const fromRect = fromSeat.getBoundingClientRect();
+            const toRect = toSeat.getBoundingClientRect();
+
+            const flyingEmoji = document.createElement('div');
+            flyingEmoji.className = 'flying-emoji';
+            flyingEmoji.textContent = emoji;
+            flyingEmoji.style.left = `${fromRect.left + fromRect.width / 2}px`;
+            flyingEmoji.style.top = `${fromRect.top + fromRect.height / 2}px`;
+
+            document.body.appendChild(flyingEmoji);
+
+            // Animate to target
+            setTimeout(() => {
+                flyingEmoji.style.left = `${toRect.left + toRect.width / 2}px`;
+                flyingEmoji.style.top = `${toRect.top + toRect.height / 2}px`;
+            }, 50);
+
+            // Remove after animation
+            setTimeout(() => {
+                flyingEmoji.remove();
+            }, 1500);
+        }
+
+        function showEmojiNotification(emoji, fromName, playerSeat) {
+            const notification = document.createElement('div');
+            notification.className = 'emoji-notification';
+            notification.textContent = `${emoji} de ${fromName}`;
+
+            playerSeat.style.position = 'relative';
+            playerSeat.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        function listenForEmojis() {
+            if (!currentRoomId) return;
+
+            const emojisRef = ref(database, `rooms/${currentRoomId}/emojis`);
+            onValue(emojisRef, (snapshot) => {
+                const emojisData = snapshot.val();
+                if (!emojisData) return;
+
+                // Get the latest emoji
+                const emojiEntries = Object.entries(emojisData);
+                const latestEmoji = emojiEntries[emojiEntries.length - 1];
+
+                if (latestEmoji) {
+                    const [emojiId, emojiData] = latestEmoji;
+
+                    // Check if this emoji is for current user
+                    if (emojiData.to === currentUserId) {
+                        const mySeat = document.querySelector(`[data-player-id="${currentUserId}"]`);
+                        if (mySeat) {
+                            showEmojiNotification(emojiData.emoji, emojiData.fromName, mySeat);
+                        }
+
+                        // Show flying animation for receiver
+                        showFlyingEmojiAnimation(emojiData.emoji, emojiData.from, emojiData.to);
+                    } else if (emojiData.from !== currentUserId && emojiData.to !== currentUserId) {
+                        // Show animation for other players watching
+                        showFlyingEmojiAnimation(emojiData.emoji, emojiData.from, emojiData.to);
+                    }
+                }
             });
         }
 
@@ -424,6 +965,9 @@
 
             initializeCards();
 
+            // Start listening for emojis
+            listenForEmojis();
+
             // Clean up on page unload
             window.addEventListener('beforeunload', () => {
                 if (currentRoomId && currentUserId) {
@@ -462,6 +1006,9 @@
 
             const playersList = document.getElementById('playersList');
             const playerCount = document.getElementById('playerCount');
+
+            // Render poker table with players
+            renderPokerTable(players);
 
             playersList.innerHTML = '';
             playerCount.textContent = Object.keys(players).length;
